@@ -1,0 +1,27 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-config
+data:
+  APP_ENV: "staging"
+  LOG_LEVEL: "info"
+  FEATURE_FLAG: "enabled"
+EOF
+ 
+# Update staging kustomization
+cat > overlays/staging/kustomization.yaml << 'EOF'
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+ 
+namespace: staging
+namePrefix: staging-
+ 
+bases:
+  - ../../base
+ 
+patchesStrategicMerge:
+  - replica-patch.yaml
+  - configmap-patch.yaml
+ 
+commonLabels:
+  environment: staging
