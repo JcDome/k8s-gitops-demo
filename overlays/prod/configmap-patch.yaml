@@ -6,22 +6,3 @@ data:
   APP_ENV: "production"
   LOG_LEVEL: "warn"
   FEATURE_FLAG: "enabled"
-EOF
- 
-# Update prod kustomization
-cat > overlays/prod/kustomization.yaml << 'EOF'
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
- 
-namespace: prod
-namePrefix: prod-
- 
-bases:
-  - ../../base
- 
-patchesStrategicMerge:
-  - replica-patch.yaml
-  - configmap-patch.yaml
- 
-commonLabels:
-  environment: prod
